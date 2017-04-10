@@ -3,6 +3,8 @@
 #ifndef __ASSIGNMENT_H__
 #define __ASSIGNMENT_H__
 
-#include "EngineMinimal.h"
+#include "Engine.h"
+
+#define COLLISION_INTERACTABLE ECC_GameTraceChannel1;
 
 #endif

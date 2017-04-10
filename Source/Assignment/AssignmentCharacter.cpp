@@ -1,6 +1,8 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
 #include "Assignment.h"
+#include "Interactable.h"
+#include "GameplayController.h"
 #include "AssignmentCharacter.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -124,4 +126,40 @@ void AAssignmentCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AAssignmentCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	CheckForInteractables();
+}
+
+void AAssignmentCharacter::CheckForInteractables()
+{
+	FHitResult HitResult;
+
+	FVector StartTrace = FollowCamera->GetComponentLocation();
+	FVector EndTrace = (FollowCamera->GetForwardVector() * 550) + StartTrace;
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+
+	AGameplayController* Controller = Cast<AGameplayController>(GetController());
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace,
+		ECC_Visibility, QueryParams) && Controller)
+	{
+		// Check if the item we hit was a interactable item
+		if (AInteractable* Interactable = Cast<AInteractable>(HitResult.GetActor()))
+		{
+			Controller->CurrentInteractable = Interactable;
+			return;
+		}
+	}
+
+	// If we didnt hit anything or the thing we hit wasnt an interactable, set the
+	// currentInteractable to nullptr
+	Controller->CurrentInteractable = nullptr;
+
 }
