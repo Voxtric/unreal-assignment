@@ -41,6 +41,9 @@ AAssignmentCharacter::AAssignmentCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	// Set up player variables
+	Health = 100.f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -161,5 +164,14 @@ void AAssignmentCharacter::CheckForInteractables()
 	// If we didnt hit anything or the thing we hit wasnt an interactable, set the
 	// currentInteractable to nullptr
 	Controller->CurrentInteractable = nullptr;
+
+}
+
+void AAssignmentCharacter::DamageCharacter(float damage)
+{
+	if (Health > damage)
+		Health -= damage;
+	else
+		Health = 0.f;
 
 }

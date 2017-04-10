@@ -90,6 +90,9 @@ class AAssignmentCharacter : public ACharacter
 public:
 	AAssignmentCharacter();
 
+	UFUNCTION(BlueprintCallable, Category = "Utils")
+	void DamageCharacter(float damage);
+
 	virtual void Tick(float DeltaTime) override;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -99,6 +102,9 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float Health;
 
 protected:
 

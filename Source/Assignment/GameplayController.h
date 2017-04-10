@@ -28,6 +28,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	TArray<FInventoryItem> Inventory;
 
+	
+
 
 protected:
 	void Interact();
