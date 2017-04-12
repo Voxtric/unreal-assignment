@@ -75,58 +75,122 @@ public:
 };
 
 
-UCLASS(config=Game)
+UCLASS(config = Game)
 class AAssignmentCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+		/** Camera boom positioning the camera behind the character */
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
+		class UCameraComponent* FollowCamera;
 public:
 	AAssignmentCharacter();
 
-	UFUNCTION(BlueprintCallable, Category = "Utils")
-	void DamageCharacter(float damage);
-
 	virtual void Tick(float DeltaTime) override;
 
+	//virtual void BeginPlay() override;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseTurnRate;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+		float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseLookUpRate;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+		float BaseLookUpRate;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float Health;
+	// Base Jump Velocity
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Attributes")
+		float JumpingVelocity;
+
+	// Base Jump Velocity
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
+		bool IsStillAlive;
+
+	// Base Jump Velocity
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
+		bool IsAttacking;
+
+	// The index of the current weapon
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
+		int32 WeaponIndex;
+
+	// To be able to disable the player during cutscenes and menus and the such.
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
+		bool IsControlable;
+
+	// Returns IsStillAlive
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		bool GetIsStillAlive() const { return IsStillAlive; }
+
+	// enable or disable inputs
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		void OnSetPlayerController(bool status);
+
+	// The attack effect on health
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		void OnChangeHealthByAmount(float usedAmount);
+
+	// Returens total health
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		float OnGetHealthAmount() const { return TotalHealth; }
+
+	// post attack operations
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void OnPostAttack();
+
+
 
 protected:
 
 	void CheckForInteractables();
 
 	/** Called for forwards/backward input */
-	void MoveForward(float Value);
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void MoveForward(float Value);
 
 	/** Called for side to side input */
-	void MoveRight(float Value);
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void MoveRight(float Value);
 
-	/** 
-	 * Called via input to turn at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
+	// Called to apply jump action
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void Jump();
+
+	// Called to stop jump and start animations of idle etc.
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void StopJumping();
+
+	// Responsible for attacking
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void OnAttack();
+
+	// Responsible for changing weapons
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void OnChangeWeapon();
+
+	/**
+	* Called via input to turn at a given rate.
+	* @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	*/
 	void TurnAtRate(float Rate);
 
 	/**
-	 * Called via input to turn look up/down at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
+	* Called via input to turn look up/down at a given rate.
+	* @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	*/
 	void LookUpAtRate(float Rate);
+
+	// Player TotalHealth
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+		float TotalHealth;
+
+	// AttackRange
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+		float AttackRange;
 
 	/** Handler for when a touch input begins. */
 	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);

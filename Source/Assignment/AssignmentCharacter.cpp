@@ -4,6 +4,9 @@
 #include "Interactable.h"
 #include "GameplayController.h"
 #include "AssignmentCharacter.h"
+//#include "GameDataTables.h"
+//#include "PaperSpriteComponent.h"
+//#include "GameDataTables.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAssignmentCharacter
@@ -12,6 +15,11 @@ AAssignmentCharacter::AAssignmentCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+	TotalHealth = 80.f;
+	AttackRange = 25.f;
+
+	JumpingVelocity = 300.f;
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -34,17 +42,45 @@ AAssignmentCharacter::AAssignmentCharacter()
 	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
-	// Create a follow camera
+												// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	IsStillAlive = true;
+	IsAttacking = false;
+	WeaponIndex = 1;
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
-	// Set up player variables
-	Health = 100.f;
+	OnSetPlayerController(true);
 }
+
+//void AAssignmentCharacter::BeginPlay()
+//{
+//	/**
+//	//Ask the datamanager to get all of the tables data at once and store them
+//	//AGameDataTables dataHolder
+//	for (TActorIterator<AGameDataTables> ActorItr(GetWorld()); ActorItr; ActorItr++)
+//	{
+//	if (ActorItr)
+//	{
+//	// print the instance name to screen
+//	// GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green,
+//	//	ActorItr->GetName());
+//
+//	// Call the fetch to the tables, now we get all the datat stored.
+//	// Why? Simply because keep reading everytime from the table itself is
+//	//	costly memory wise.
+//	// The most safe method is to just read all the data at once and whenever
+//	// needed just relate back to the pointer.
+//	TablesInstance = *ActorItr;
+//	TablesInstance->OnFetchAllTables();
+//	}
+//	}
+//	*/
+//}
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -53,8 +89,11 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 {
 	// Set up gameplay key bindings
 	check(InputComponent);
-	InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	InputComponent->BindAction("Jump", IE_Pressed, this, &AAssignmentCharacter::Jump);
+	InputComponent->BindAction("Jump", IE_Released, this, &AAssignmentCharacter::StopJumping);
+
+	InputComponent->BindAction("Attack", IE_Released, this, &AAssignmentCharacter::OnAttack);
+	InputComponent->BindAction("ChangeWeapon", IE_Released, this, &AAssignmentCharacter::OnChangeWeapon);
 
 	InputComponent->BindAxis("MoveForward", this, &AAssignmentCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AAssignmentCharacter::MoveRight);
@@ -72,6 +111,69 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 	InputComponent->BindTouch(IE_Released, this, &AAssignmentCharacter::TouchStopped);
 }
 
+void AAssignmentCharacter::Jump()
+{
+	if (IsControlable && !IsAttacking)
+	{
+		bPressedJump = true;
+		JumpKeyHoldTime = 0.f;
+	}
+}
+
+void AAssignmentCharacter::StopJumping()
+{
+	if (IsControlable)
+	{
+		bPressedJump = false;
+		JumpKeyHoldTime = 0.f;
+	}
+}
+
+void AAssignmentCharacter::OnAttack()
+{
+	if (IsControlable)
+	{
+		IsAttacking = true;
+	}
+}
+
+void AAssignmentCharacter::OnPostAttack()
+{
+	if (IsControlable)
+	{
+		IsAttacking = false;
+	}
+}
+
+void AAssignmentCharacter::OnChangeWeapon()
+{
+	/**
+	if (IsControlable)
+	{
+	if (WeaponIndex < TablesInstance->AllWeaponData.Num())
+	{
+	WeaponIndex++;
+	}
+	else
+	{
+	WeaponIndex = 1;
+	}
+	}
+	*/
+}
+
+void AAssignmentCharacter::OnSetPlayerController(bool status)
+{
+	IsControlable = status;
+}
+
+void AAssignmentCharacter::OnChangeHealthByAmount(float usedAmount)
+{
+	TotalHealth -= usedAmount;
+	FOutputDeviceNull ar;
+	this->CallFunctionByNameWithArguments(TEXT("ApplyGetDamageEffect"),
+		ar, NULL, true);
+}
 
 void AAssignmentCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
@@ -118,12 +220,12 @@ void AAssignmentCharacter::MoveForward(float Value)
 
 void AAssignmentCharacter::MoveRight(float Value)
 {
-	if ( (Controller != NULL) && (Value != 0.0f) )
+	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
+
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
@@ -164,14 +266,5 @@ void AAssignmentCharacter::CheckForInteractables()
 	// If we didnt hit anything or the thing we hit wasnt an interactable, set the
 	// currentInteractable to nullptr
 	Controller->CurrentInteractable = nullptr;
-
-}
-
-void AAssignmentCharacter::DamageCharacter(float damage)
-{
-	if (Health > damage)
-		Health -= damage;
-	else
-		Health = 0.f;
 
 }
