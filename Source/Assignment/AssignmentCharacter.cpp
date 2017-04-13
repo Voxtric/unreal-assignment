@@ -4,6 +4,7 @@
 #include "Interactable.h"
 #include "GameplayController.h"
 #include "AssignmentCharacter.h"
+#include "Engine.h"
 //#include "GameDataTables.h"
 //#include "PaperSpriteComponent.h"
 //#include "GameDataTables.h"
@@ -16,7 +17,7 @@ AAssignmentCharacter::AAssignmentCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	TotalHealth = 80.f;
+	TotalHealth = 100.f;
 	AttackRange = 25.f;
 
 	JumpingVelocity = 300.f;
@@ -92,7 +93,7 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AAssignmentCharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &AAssignmentCharacter::StopJumping);
 
-	InputComponent->BindAction("Attack", IE_Released, this, &AAssignmentCharacter::OnAttack);
+	InputComponent->BindAction("Attack", IE_Pressed, this, &AAssignmentCharacter::OnAttack);
 	InputComponent->BindAction("ChangeWeapon", IE_Released, this, &AAssignmentCharacter::OnChangeWeapon);
 
 	InputComponent->BindAxis("MoveForward", this, &AAssignmentCharacter::MoveForward);
@@ -113,8 +114,10 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 
 void AAssignmentCharacter::Jump()
 {
+
 	if (IsControlable && !IsAttacking)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("Jump()"));
 		bPressedJump = true;
 		JumpKeyHoldTime = 0.f;
 	}
@@ -124,6 +127,7 @@ void AAssignmentCharacter::StopJumping()
 {
 	if (IsControlable)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("StopJumping()"));
 		bPressedJump = false;
 		JumpKeyHoldTime = 0.f;
 	}
@@ -133,6 +137,7 @@ void AAssignmentCharacter::OnAttack()
 {
 	if (IsControlable)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
 		IsAttacking = true;
 	}
 }
@@ -141,6 +146,7 @@ void AAssignmentCharacter::OnPostAttack()
 {
 	if (IsControlable)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
 		IsAttacking = false;
 	}
 }
@@ -169,6 +175,7 @@ void AAssignmentCharacter::OnSetPlayerController(bool status)
 
 void AAssignmentCharacter::OnChangeHealthByAmount(float usedAmount)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnChangeHealthByAmount"));
 	TotalHealth -= usedAmount;
 	FOutputDeviceNull ar;
 	this->CallFunctionByNameWithArguments(TEXT("ApplyGetDamageEffect"),
@@ -206,7 +213,7 @@ void AAssignmentCharacter::LookUpAtRate(float Rate)
 
 void AAssignmentCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != NULL) && (Value != 0.0f) && IsControlable && !IsAttacking)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -220,7 +227,7 @@ void AAssignmentCharacter::MoveForward(float Value)
 
 void AAssignmentCharacter::MoveRight(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != NULL) && (Value != 0.0f) && IsControlable && !IsAttacking)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -238,6 +245,12 @@ void AAssignmentCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckForInteractables();
+
+	if (TotalHealth <= 0)
+	{
+		IsControlable = false;
+		IsStillAlive = false;
+	}
 }
 
 void AAssignmentCharacter::CheckForInteractables()

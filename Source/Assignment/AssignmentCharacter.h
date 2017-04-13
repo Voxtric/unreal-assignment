@@ -106,11 +106,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Attributes")
 		float JumpingVelocity;
 
-	// Base Jump Velocity
+	// checks if player is still alive
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
 		bool IsStillAlive;
 
-	// Base Jump Velocity
+	// knows if player is attacking
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
 		bool IsAttacking;
 
@@ -126,6 +126,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		bool GetIsStillAlive() const { return IsStillAlive; }
 
+	// Returns IsAttacking
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		bool GetIsAttacking() const { return IsAttacking; }
+
 	// enable or disable inputs
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		void OnSetPlayerController(bool status);
@@ -137,6 +141,10 @@ public:
 	// Returens total health
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		float OnGetHealthAmount() const { return TotalHealth; }
+
+	// Returens total health in a value between 0 and 1.
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		float OnGetHealthPercentage() const { return TotalHealth / 100.f; }
 
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
