@@ -38,7 +38,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		void UpdateControlRotation(float DeltaTime, bool bUpdatePawn);
-	
+
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		bool PawnCanBeSeen(APawn * target);
 

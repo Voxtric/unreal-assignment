@@ -10,8 +10,8 @@ class ASSIGNMENT_API AEnemy : public ACharacter
 {
 	GENERATED_BODY()
 
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Triggers, meta = (AllowPrivateAccess = "true"))
-		class USphereComponent* bodySphereTrigger;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Triggers, meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* bodySphereTrigger;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Triggers, meta = (AllowPrivateAccess = "true"))
 		class USphereComponent* leftHandTrigger;

@@ -185,8 +185,8 @@ void AEnemy::OnSeePawn(APawn *OtherPawn)
 //On overlap component callback
 void AEnemy::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	AAssignmentCharacter* const _tempCharacter = Cast<AAssignmentCharacter>(OtherActor);
-	if (_tempCharacter)
+	AAssignmentCharacter* const _tempAssignmentCharacter = Cast<AAssignmentCharacter>(OtherActor);
+	if (_tempAssignmentCharacter)
 	{
 		FString message = TEXT("=== HIT PLAYER WITH HAND ==== ");
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, message);
@@ -195,6 +195,7 @@ void AEnemy::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, clas
 		leftHandTrigger->bGenerateOverlapEvents = 0;
 		rightHandTrigger->bGenerateOverlapEvents = 0;
 
-		_tempCharacter->OnChangeHealthByAmount(5.f);
+		_tempAssignmentCharacter->OnChangeHealthByAmount(5.f);
 	}
 }
+
