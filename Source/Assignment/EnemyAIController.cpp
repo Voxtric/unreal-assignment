@@ -4,6 +4,7 @@
 #include "EnemyAIController.h"
 #include "Enemy.h"
 #include "AssignmentCharacter.h"
+#include "Engine.h"
 /* AI Specific includes */
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
@@ -69,6 +70,13 @@ void AEnemyAIController::SetEnemy(class APawn* InPawn)
 	{
 		BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 		BlackboardComp->SetValueAsVector(FName("N", EnemyPositionKeyID), InPawn->GetActorLocation());
+
+		int x = InPawn->GetActorLocation().X;
+		int y = InPawn->GetActorLocation().Y;
+
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, FString::FromInt(x));
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, FString::FromInt(y));
+		
 		SetFocus(InPawn);
 	}
 }

@@ -117,7 +117,6 @@ void AAssignmentCharacter::Jump()
 
 	if (IsControlable && !IsAttacking)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("Jump()"));
 		bPressedJump = true;
 		JumpKeyHoldTime = 0.f;
 	}
