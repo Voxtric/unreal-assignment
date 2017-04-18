@@ -71,11 +71,6 @@ void AEnemyAIController::SetEnemy(class APawn* InPawn)
 		BlackboardComp->SetValue<UBlackboardKeyType_Object>(EnemyKeyID, InPawn);
 		BlackboardComp->SetValueAsVector(FName("N", EnemyPositionKeyID), InPawn->GetActorLocation());
 
-		int x = InPawn->GetActorLocation().X;
-		int y = InPawn->GetActorLocation().Y;
-
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, FString::FromInt(x));
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, FString::FromInt(y));
 		
 		SetFocus(InPawn);
 	}

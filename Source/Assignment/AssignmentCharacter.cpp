@@ -126,7 +126,7 @@ void AAssignmentCharacter::StopJumping()
 {
 	if (IsControlable)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("StopJumping()"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("StopJumping()"));
 		bPressedJump = false;
 		JumpKeyHoldTime = 0.f;
 	}
@@ -136,7 +136,7 @@ void AAssignmentCharacter::OnAttack()
 {
 	if (IsControlable)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
 		IsAttacking = true;
 	}
 }
@@ -145,7 +145,7 @@ void AAssignmentCharacter::OnPostAttack()
 {
 	if (IsControlable)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
 		IsAttacking = false;
 	}
 }
@@ -174,7 +174,7 @@ void AAssignmentCharacter::OnSetPlayerController(bool status)
 
 void AAssignmentCharacter::OnChangeHealthByAmount(float usedAmount)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnChangeHealthByAmount"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnChangeHealthByAmount"));
 	TotalHealth -= usedAmount;
 	FOutputDeviceNull ar;
 	this->CallFunctionByNameWithArguments(TEXT("ApplyGetDamageEffect"),
