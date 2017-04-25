@@ -303,35 +303,35 @@ void AAssignmentCharacter::OnResetPlayer()
 	OnSetPlayerController(true);
 }
 
-void AAssignmentCharacter::SaveTime(float time)
+void AAssignmentCharacter::SaveValue(FString varName, float var)
 {
-  FString fileName = FString("time.tmp");
+  FString fileName = FString(varName);
   IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
   IFileHandle* fileHandle = platformFile.OpenWrite(*fileName);
   if (fileHandle)
   {
     uint8* byteArray = reinterpret_cast<uint8*>(FMemory::Malloc(sizeof(float)));
     float* floatPointer = reinterpret_cast<float*>(byteArray);
-    *floatPointer = Time;
+    *floatPointer = var;
     fileHandle->Write(byteArray, sizeof(float));
     delete fileHandle;
     FMemory::Free(byteArray);
   }
 }
 
-float AAssignmentCharacter::LoadTime()
+float AAssignmentCharacter::LoadValue(FString varName)
 {
-  float time = -1.0f;
-  FString fileName = FString("time.tmp");
+  float var = -1.0f;
+  FString fileName = FString(varName);
   IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
   IFileHandle* fileHandle = platformFile.OpenRead(*fileName);
   if (fileHandle)
   {
-    float* floatPointer = &time;
+    float* floatPointer = &var;
     uint8* byteBuffer = reinterpret_cast<uint8*>(floatPointer);
     fileHandle->Read(byteBuffer, sizeof(float));
     delete fileHandle;
     platformFile.DeleteFile(*fileName);
   }
-  return time;
+  return var;
 }

@@ -146,14 +146,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		float OnGetHealthPercentage() const { return TotalHealth / 100.f; }
 
+  UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+    float OnGetTimePercentage() const { return Time / 600.f; }
+
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		void OnResetPlayer();
 
   UFUNCTION(BlueprintCallable, Category = "Player Attributes")
-    void SaveTime(float time);
+    void SaveValue(FString valName, float val);
 
   UFUNCTION(BlueprintCallable, Category = "Player Attributes")
-    float LoadTime();
+    float LoadValue(FString valName);
 
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
