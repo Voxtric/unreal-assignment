@@ -146,6 +146,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		float OnGetHealthPercentage() const { return TotalHealth / 100.f; }
 
+	// Returens total health in a value between 0 and 1.
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		void OnResetPlayer();
+
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
 		void OnPostAttack();
