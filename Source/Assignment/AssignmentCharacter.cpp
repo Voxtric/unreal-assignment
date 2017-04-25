@@ -16,6 +16,8 @@ AAssignmentCharacter::AAssignmentCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+  
+  Time = 600.0f;
 
 	TotalHealth = 100.f;
 	AttackRange = 25.f;
@@ -299,4 +301,37 @@ void AAssignmentCharacter::OnResetPlayer()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 	OnSetPlayerController(true);
+}
+
+void AAssignmentCharacter::SaveTime(float time)
+{
+  FString fileName = FString("time.tmp");
+  IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  IFileHandle* fileHandle = platformFile.OpenWrite(*fileName);
+  if (fileHandle)
+  {
+    uint8* byteArray = reinterpret_cast<uint8*>(FMemory::Malloc(sizeof(float)));
+    float* floatPointer = reinterpret_cast<float*>(byteArray);
+    *floatPointer = Time;
+    fileHandle->Write(byteArray, sizeof(float));
+    delete fileHandle;
+    FMemory::Free(byteArray);
+  }
+}
+
+float AAssignmentCharacter::LoadTime()
+{
+  float time = -1.0f;
+  FString fileName = FString("time.tmp");
+  IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  IFileHandle* fileHandle = platformFile.OpenRead(*fileName);
+  if (fileHandle)
+  {
+    float* floatPointer = &time;
+    uint8* byteBuffer = reinterpret_cast<uint8*>(floatPointer);
+    fileHandle->Read(byteBuffer, sizeof(float));
+    delete fileHandle;
+    platformFile.DeleteFile(*fileName);
+  }
+  return time;
 }

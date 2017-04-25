@@ -146,9 +146,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		float OnGetHealthPercentage() const { return TotalHealth / 100.f; }
 
-	// Returens total health in a value between 0 and 1.
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		void OnResetPlayer();
+
+  UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+    void SaveTime(float time);
+
+  UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+    float LoadTime();
 
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
@@ -199,6 +204,9 @@ protected:
 	// Player TotalHealth
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
 		float TotalHealth;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+    float Time;
 
 	// AttackRange
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
