@@ -28,6 +28,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	TArray<FInventoryItem> Inventory;
 
+  UFUNCTION(BlueprintCallable, Category = "Game|Player")
+    void SetMousePosition(float LocationX, float LocationY);
+
 	
 
 

@@ -18,6 +18,15 @@ void AGameplayController::SetupInputComponent()
 
 }
 
+void AGameplayController::SetMousePosition(float LocationX, float LocationY)
+{
+  const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+  int intX = (int)(ViewportSize.X / 100.0f * LocationX);
+  int intY = (int)(ViewportSize.Y / 100.0f * LocationY);
+  FViewport* v = CastChecked<ULocalPlayer>(this->Player)->ViewportClient->Viewport;
+  v->SetMouse(intX, intY);
+}
+
 void AGameplayController::Interact()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, TEXT("Interact"));
