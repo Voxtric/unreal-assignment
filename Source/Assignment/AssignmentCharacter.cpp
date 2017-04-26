@@ -18,6 +18,7 @@ AAssignmentCharacter::AAssignmentCharacter()
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
   
   Time = 600.0f;
+  Score = 0;
 
 	TotalHealth = 100.f;
 	AttackRange = 25.f;

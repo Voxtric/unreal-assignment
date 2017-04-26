@@ -211,6 +211,9 @@ protected:
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
     float Time;
 
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+    int Score;
+
 	// AttackRange
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
 		float AttackRange;

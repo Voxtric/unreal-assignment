@@ -27,6 +27,127 @@ void AGameplayController::SetMousePosition(float LocationX, float LocationY)
   v->SetMouse(intX, intY);
 }
 
+void AGameplayController::AddScore(TArray<int32>& scoreValues, TArray<FString>& scorePlayers, int32 score, FString playerName)
+{
+  if (score > scoreValues[9])
+  {
+    scoreValues[9] = score;
+    scorePlayers[9] = playerName;
+    for (int i = 8; i >= 0; --i)
+    {
+      if (score > scoreValues[i])
+      {
+        scoreValues[i + 1] = scoreValues[i];
+        scoreValues[i] = score;
+        scorePlayers[i + 1] = scorePlayers[i];
+        scorePlayers[i] = playerName;
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+}
+
+void AGameplayController::SaveScores(TArray<int32> scoreValues, TArray<FString> scorePlayers)
+{
+  FString fileName = FString("scoreValues");
+  IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  IFileHandle* fileHandle = platformFile.OpenWrite(*fileName);
+  if (fileHandle)
+  {
+    uint8* byteArray = reinterpret_cast<uint8*>(FMemory::Malloc(sizeof(int32)));
+    for (unsigned int i = 0; i < 10; ++i)
+    {
+      int32 var = scoreValues[i];
+      int32* intPointer = reinterpret_cast<int32*>(byteArray);
+      *intPointer = var;
+      fileHandle->Write(byteArray, sizeof(float));
+    }
+    delete fileHandle;
+    FMemory::Free(byteArray);
+  }
+
+  fileName = FString("scorePlayers");
+  platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  fileHandle = platformFile.OpenWrite(*fileName);
+  if (fileHandle)
+  {
+    uint8* byteArray = reinterpret_cast<uint8*>(FMemory::Malloc(sizeof(TCHAR)));
+    for (unsigned int i = 0; i < 10; ++i)
+    {
+      FString player = scorePlayers[i];
+      for (unsigned int j = 0; j < 20; ++j)
+      {
+        TCHAR var = ' ';
+        if (player.IsValidIndex(j))
+        {
+          var = (*player)[j];
+        }
+        TCHAR* charPointer = reinterpret_cast<TCHAR*>(byteArray);
+        *charPointer = var;
+        fileHandle->Write(byteArray, sizeof(TCHAR));
+      }
+    }
+    delete fileHandle;
+    FMemory::Free(byteArray);
+  }
+}
+
+TArray<int32> AGameplayController::LoadScoreValues()
+{
+  TArray<int32> intTArray;
+  intTArray.Init(0, 10);
+
+  FString fileName = FString("scoreValues");
+  IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  IFileHandle* fileHandle = platformFile.OpenRead(*fileName);
+  if (fileHandle)
+  {
+    for (unsigned int i = 0; i < 10; ++i)
+    {
+      int32 var = 0;
+      int32* intPointer = &var;
+      uint8* byteBuffer = reinterpret_cast<uint8*>(intPointer);
+      fileHandle->Read(byteBuffer, sizeof(int32));
+      intTArray[i] = var;
+    }
+    delete fileHandle;
+  }
+
+  return intTArray;
+}
+
+TArray<FString> AGameplayController::LoadScorePlayers()
+{
+  TArray<FString> stringTArray;
+  stringTArray.Init("", 10);
+
+  FString fileName = FString("scorePlayers");
+  IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  IFileHandle* fileHandle = platformFile.OpenRead(*fileName);
+  if (fileHandle)
+  {
+    for (unsigned int i = 0; i < 10; ++i)
+    {
+      FString string = FString("");
+      for (unsigned int j = 0; j < 20; ++j)
+      {
+        TCHAR var = ' ';
+        TCHAR* charPointer = &var;
+        uint8* byteBuffer = reinterpret_cast<uint8*>(charPointer);
+        fileHandle->Read(byteBuffer, sizeof(TCHAR));
+        string.AppendChar(var);
+      }
+      stringTArray[i] = string.TrimTrailing();
+    }
+    delete fileHandle;
+  }
+
+  return stringTArray;
+}
+
 void AGameplayController::Interact()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, TEXT("Interact"));
