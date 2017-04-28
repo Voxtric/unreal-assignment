@@ -5,7 +5,7 @@
 #include "GameplayController.h"
 #include "AssignmentCharacter.h"
 #include "Engine.h"
-//#include "GameDataTables.h"
+#include "GameDataTables.h"
 //#include "PaperSpriteComponent.h"
 //#include "GameDataTables.h"
 
@@ -61,30 +61,30 @@ AAssignmentCharacter::AAssignmentCharacter()
 	OnSetPlayerController(true);
 }
 
-//void AAssignmentCharacter::BeginPlay()
-//{
-//	/**
-//	//Ask the datamanager to get all of the tables data at once and store them
-//	//AGameDataTables dataHolder
-//	for (TActorIterator<AGameDataTables> ActorItr(GetWorld()); ActorItr; ActorItr++)
-//	{
-//	if (ActorItr)
-//	{
-//	// print the instance name to screen
-//	// GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green,
-//	//	ActorItr->GetName());
-//
-//	// Call the fetch to the tables, now we get all the datat stored.
-//	// Why? Simply because keep reading everytime from the table itself is
-//	//	costly memory wise.
-//	// The most safe method is to just read all the data at once and whenever
-//	// needed just relate back to the pointer.
-//	TablesInstance = *ActorItr;
-//	TablesInstance->OnFetchAllTables();
-//	}
-//	}
-//	*/
-//}
+void AAssignmentCharacter::BeginPlay()
+{
+	////Ask the datamanager to get all of the tables data at once and store them
+	////AGameDataTables dataHolder
+	//for (TActorIterator<AGameDataTables> ActorItr(GetWorld()); ActorItr; ActorItr++)
+	//{
+	//	if (ActorItr)
+	//	{
+	//	// print the instance name to screen
+	//	 GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green,
+	//		ActorItr->GetName());
+
+	//	// Call the fetch to the tables, now we get all the datat stored.
+	//	// Why? Simply because keep reading everytime from the table itself is
+	//	//	costly memory wise.
+	//	// The most safe method is to just read all the data at once and whenever
+	//	// needed just relate back to the pointer.
+	//	TablesInstance = *ActorItr;
+	//	TablesInstance->OnFetchAllTables();
+
+	//	}
+	//}
+
+}
 
 //////////////////////////////////////////////////////////////////////////
 // Input

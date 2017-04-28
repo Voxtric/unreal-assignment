@@ -1,0 +1,5 @@
+Name,Icon,Display,Damage,CooldownTime
+0,none_icon,Empty,0,0
+1,sword_icon,The Hot Blade,5,1
+2,axe_icon,The Sharpest,10,3
+3,hammer_icon,The Mighty Hammer,15,6

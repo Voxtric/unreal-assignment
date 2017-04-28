@@ -1,7 +1,8 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 #pragma once
-#include "GameFramework/Character.h"
+#include "GameDataTables.h"
 #include "Engine/DataTable.h"
+#include "GameFramework/Character.h"
 #include "AssignmentCharacter.generated.h"
 
 USTRUCT(BlueprintType)
@@ -92,7 +93,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	//virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
@@ -122,6 +123,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
 		bool IsControlable;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Game DataTables")
+		AGameDataTables* TablesInstance;
+
 	// Returns IsStillAlive
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		bool GetIsStillAlive() const { return IsStillAlive; }
@@ -146,17 +150,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		float OnGetHealthPercentage() const { return TotalHealth / 100.f; }
 
-  UFUNCTION(BlueprintCallable, Category = "Player Attributes")
-    float OnGetTimePercentage() const { return Time / 600.f; }
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		float OnGetTimePercentage() const { return Time / 600.f; }
 
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		void OnResetPlayer();
 
-  UFUNCTION(BlueprintCallable, Category = "Player Attributes")
-    void SaveValue(FString valName, float val);
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		void SaveValue(FString valName, float val);
 
-  UFUNCTION(BlueprintCallable, Category = "Player Attributes")
-    float LoadValue(FString valName);
+	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
+		float LoadValue(FString valName);
 
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
@@ -208,11 +212,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
 		float TotalHealth;
 
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
-    float Time;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+		float Time;
 
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
-    int Score;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+		int Score;
 
 	// AttackRange
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
