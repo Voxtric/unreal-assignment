@@ -55,26 +55,5 @@ void AGameDataTables::OnFetchAllTables()
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, message);
 	}
 
-
-	//Get all the row names and stor them temporary here, the point is to define the amount of rows, the best way yet!
-	TArray<FName> missionsTableRowsNames = MissionsTable->GetRowNames();
-
-	//usually we used 0 as the start index, but a table have it' first row indexed as 1, other wise it will crash
-	for (int32 e = 1; e < missionsTableRowsNames.Num() + 1; e++)
-	{
-		FString IndexString = FString::FromInt((int32)e);
-		FName IndexName = FName(*IndexString);
-
-		FMissionStruct* aStructRow = MissionsTable->FindRow<FMissionStruct>(IndexName, ContextString, true);
-		AllMissionsData.Add(aStructRow);
-	}
-	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::FromInt(AllMissionsData.Num()));
-
-	//Just a print to screen to check if I got all the values correctly!
-	for (int32 x = 0; x < AllMissionsData.Num(); x++)
-	{
-		FString message = TEXT(" Number: ") + FString::FromInt(x) + TEXT(" Kills: ") + FString::FromInt(AllMissionsData[x]->Kill) + TEXT(" Collects: ") + FString::FromInt(AllMissionsData[x]->Collect);
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, message);
-	}
 }
 

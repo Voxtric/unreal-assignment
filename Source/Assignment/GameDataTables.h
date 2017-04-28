@@ -74,14 +74,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game DataTables")
 		UDataTable* WeaponsTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game DataTables")
-		UDataTable* MissionsTable;
-
 	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game DataTables")
 	TArray<FWeaponStruct*> AllWeaponsData;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Game DataTables")
-	TArray<FMissionStruct*> AllMissionsData;
 
 	UFUNCTION(BlueprintCallable, Category = "Game DataTables")
 		void OnFetchAllTables();

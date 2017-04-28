@@ -64,34 +64,30 @@ AAssignmentCharacter::AAssignmentCharacter()
 }
 
 
-//void AAssignmentCharacter::SetUpDataTables()
+//void AAssignmentCharacter::BeginPlay()
 //{
-//	//Ask the datamanager to get all the tables datat at once and store them
-//	//AGameDataTables dataHolder;
+//	// Call the base class  
+//	Super::BeginPlay();
+//
+//	Ask the datamanager to get all the tables datat at once and store them
+//	AGameDataTables dataHolder;
 //	for (TActorIterator<AGameDataTables> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 //	{
 //		if (ActorItr)
 //		{
 //			//print theinstance name to screen
 //			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, ActorItr->GetName());
-//
+//	
 //			//Call the fetch to the tables, now we get all the datat stored. Why? simpley because keep readin everytime from the table itself is going to cost over your memory
 //			//but the mosts afe method, is just to read all the datat at once, and then keep getting whatever needed values from the storage we've .
 //			TablesInstance = *ActorItr;
 //			TablesInstance->OnFetchAllTables();
-//
+//	
 //		}
 //	}
+//	
 //
 //}
-
-void AAssignmentCharacter::BeginPlay()
-{
-	// Call the base class  
-	Super::BeginPlay();
-
-
-}
 
 //////////////////////////////////////////////////////////////////////////
 // Input
