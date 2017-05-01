@@ -136,7 +136,6 @@ void AAssignmentCharacter::OnAttack()
 	}
 }
 
-
 void AAssignmentCharacter::OnPostAttack()
 {
 	if (IsControlable)
