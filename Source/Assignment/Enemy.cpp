@@ -69,6 +69,11 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (TotalHealth <= 0)
+	{
+		IsDead = true;
+	}
+
 }
 
 //Called to bind functionality to input -> Default by UE
@@ -93,8 +98,12 @@ void AEnemy::PostInitializeComponents()
 
 void AEnemy::FaceRotation(FRotator NewRotation, float DeltaTime)
 {
+	if (!IsDead)
+	{
 	FRotator CurrentRotation = FMath::RInterpTo(GetActorRotation(), NewRotation, DeltaTime, 8.0f);
 	Super::FaceRotation(CurrentRotation, DeltaTime);
+	}
+
 }
 
 //TODO: Update this logic and comment it
@@ -180,6 +189,15 @@ void AEnemy::OnSeePawn(APawn *OtherPawn)
 	FString message = TEXT(">>>>>>>>>>> Saw Actor <<<<<<<<<<<< ") + OtherPawn->GetName();
 	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, message);
 	//UE_LOG(LogClass, Log, TEXT(">>>>>>>>>>> Saw Actor <<<<<<<<<<<<"));
+}
+
+void AEnemy::OnChangeHealthByAmount(float usedAmount)
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnChangeHealthByAmount"));
+	TotalHealth -= usedAmount;
+	FOutputDeviceNull ar;
+	this->CallFunctionByNameWithArguments(TEXT("ApplyGetDamageEffect"),
+		ar, NULL, true);
 }
 
 //On overlap component callback

@@ -35,6 +35,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	// The attack effect on health
+	UFUNCTION(BlueprintCallable, Category = "Enemy Attributes")
+		void OnChangeHealthByAmount(float usedAmount);
+
 	//The health of the enemy
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Behavior")
 		float TotalHealth;

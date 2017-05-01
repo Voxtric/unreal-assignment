@@ -4,6 +4,7 @@
 #include "Interactable.h"
 #include "GameplayController.h"
 #include "AssignmentCharacter.h"
+#include "Enemy.h"
 #include "Engine.h"
 #include "GameDataTables.h"
 //#include "PaperSpriteComponent.h"
@@ -51,6 +52,13 @@ AAssignmentCharacter::AAssignmentCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	FColor handsTriggersColor = FColor(0, 0, 255, 255);
+
+	rightHandTrigger = CreateDefaultSubobject<USphereComponent>(TEXT("RightHandTriggerSphere"));
+	rightHandTrigger->SetSphereRadius(70.f);
+	rightHandTrigger->SetupAttachment(this->GetMesh(), "hand_r");
+	rightHandTrigger->ShapeColor = handsTriggersColor;
+	rightHandTrigger->bGenerateOverlapEvents = 0;
 
 	IsStillAlive = true;
 	IsAttacking = false;
@@ -65,30 +73,6 @@ AAssignmentCharacter::AAssignmentCharacter()
 }
 
 
-//void AAssignmentCharacter::BeginPlay()
-//{
-//	// Call the base class  
-//	Super::BeginPlay();
-//
-//	Ask the datamanager to get all the tables datat at once and store them
-//	AGameDataTables dataHolder;
-//	for (TActorIterator<AGameDataTables> ActorItr(GetWorld()); ActorItr; ++ActorItr)
-//	{
-//		if (ActorItr)
-//		{
-//			//print theinstance name to screen
-//			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, ActorItr->GetName());
-//	
-//			//Call the fetch to the tables, now we get all the datat stored. Why? simpley because keep readin everytime from the table itself is going to cost over your memory
-//			//but the mosts afe method, is just to read all the datat at once, and then keep getting whatever needed values from the storage we've .
-//			TablesInstance = *ActorItr;
-//			TablesInstance->OnFetchAllTables();
-//	
-//		}
-//	}
-//	
-//
-//}
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -117,6 +101,9 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 	// handle touch devices
 	InputComponent->BindTouch(IE_Pressed, this, &AAssignmentCharacter::TouchStarted);
 	InputComponent->BindTouch(IE_Released, this, &AAssignmentCharacter::TouchStopped);
+
+	// Register to the delegate of OnComponentBeginOverlap
+	rightHandTrigger->OnComponentBeginOverlap.AddDynamic(this, &AAssignmentCharacter::OnHandTriggerOverlap);
 }
 
 void AAssignmentCharacter::Jump()
@@ -145,8 +132,10 @@ void AAssignmentCharacter::OnAttack()
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
 		IsAttacking = true;
+		rightHandTrigger->bGenerateOverlapEvents = 1;
 	}
 }
+
 
 void AAssignmentCharacter::OnPostAttack()
 {
@@ -154,24 +143,13 @@ void AAssignmentCharacter::OnPostAttack()
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
 		IsAttacking = false;
+		rightHandTrigger->bGenerateOverlapEvents = 0;
 	}
 }
 
 void AAssignmentCharacter::OnChangeWeapon()
 {
-	/**
-	if (IsControlable)
-	{
-	if (WeaponIndex < TablesInstance->AllWeaponData.Num())
-	{
-	WeaponIndex++;
-	}
-	else
-	{
-	WeaponIndex = 1;
-	}
-	}
-	*/
+
 }
 
 void AAssignmentCharacter::OnSetPlayerController(bool status)
@@ -339,4 +317,20 @@ float AAssignmentCharacter::LoadValue(FString varName)
     platformFile.DeleteFile(*fileName);
   }
   return var;
+}
+
+//On overlap component callback
+void AAssignmentCharacter::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	AEnemy* const _tempEnemy = Cast<AEnemy>(OtherActor);
+	if (_tempEnemy)
+	{
+		FString message = TEXT("=== HIT ENEMY ==== ");
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, message);
+
+		//in case it hit the player, it is good idea to disable the triggers, this way we'll make sure that the triggers will not over calculate with each single hit
+		rightHandTrigger->bGenerateOverlapEvents = 0;
+
+		_tempEnemy->OnChangeHealthByAmount(10.f);
+	}
 }

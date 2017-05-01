@@ -88,6 +88,10 @@ class AAssignmentCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Triggers, meta = (AllowPrivateAccess = "true"))
+		class USphereComponent* rightHandTrigger;
+
 public:
 	AAssignmentCharacter();
 
@@ -124,9 +128,6 @@ public:
 	// To be able to disable the player during cutscenes and menus and the such.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
 		bool IsControlable;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Game DataTables")
-		AGameDataTables* TablesInstance;
 
 	// Returns IsStillAlive
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
@@ -167,6 +168,9 @@ public:
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
 		void OnPostAttack();
+
+	UFUNCTION()
+		void OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 
 
