@@ -126,7 +126,7 @@ public:
 		int32 WeaponIndex;
 
 	// To be able to disable the player during cutscenes and menus and the such.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
 		bool IsControlable;
 
 	// Returns IsStillAlive
