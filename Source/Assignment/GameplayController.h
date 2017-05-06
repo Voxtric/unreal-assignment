@@ -32,7 +32,7 @@ public:
     void SetMousePosition(float LocationX, float LocationY);
 
   UFUNCTION(BlueprintCallable, Category = "Game")
-    void AddScore(UPARAM(ref) TArray<int32>& scoreValues, UPARAM(ref) TArray<FString>& scorePlayers, int32 score, FString playerName);
+    int32 AddScore(UPARAM(ref) TArray<int32>& scoreValues, UPARAM(ref) TArray<FString>& scorePlayers, int32 score, FString playerName);
 
   UFUNCTION(BlueprintCallable, Category = "Game")
     void SaveScores(TArray<int32> scoreValues, TArray<FString> scorePlayers);

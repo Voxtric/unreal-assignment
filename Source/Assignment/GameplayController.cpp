@@ -27,12 +27,14 @@ void AGameplayController::SetMousePosition(float LocationX, float LocationY)
   v->SetMouse(intX, intY);
 }
 
-void AGameplayController::AddScore(TArray<int32>& scoreValues, TArray<FString>& scorePlayers, int32 score, FString playerName)
+int32 AGameplayController::AddScore(TArray<int32>& scoreValues, TArray<FString>& scorePlayers, int32 score, FString playerName)
 {
+  int32 index = -1;
   if (score > scoreValues[9])
   {
     scoreValues[9] = score;
     scorePlayers[9] = playerName;
+    index = 9;
     for (int i = 8; i >= 0; --i)
     {
       if (score > scoreValues[i])
@@ -41,6 +43,7 @@ void AGameplayController::AddScore(TArray<int32>& scoreValues, TArray<FString>& 
         scoreValues[i] = score;
         scorePlayers[i + 1] = scorePlayers[i];
         scorePlayers[i] = playerName;
+        index = i;
       }
       else
       {
@@ -48,6 +51,7 @@ void AGameplayController::AddScore(TArray<int32>& scoreValues, TArray<FString>& 
       }
     }
   }
+  return index;
 }
 
 void AGameplayController::SaveScores(TArray<int32> scoreValues, TArray<FString> scorePlayers)
