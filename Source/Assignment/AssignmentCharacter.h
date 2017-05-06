@@ -97,8 +97,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	//virtual void BeginPlay() override;
-
 	//void SetUpDataTables();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
