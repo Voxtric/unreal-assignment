@@ -59,7 +59,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Behavior")
 		bool IsAttacking;
 
-
 	//The sensing component used to see or hear the player
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy AI")
 		class UPawnSensingComponent* PawnSensor;

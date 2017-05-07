@@ -128,7 +128,7 @@ void AAssignmentCharacter::StopJumping()
 
 void AAssignmentCharacter::OnAttack()
 {
-	if (IsControlable)
+	if (IsControlable && !IsAttacking)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
 		IsAttacking = true;
@@ -324,9 +324,6 @@ void AAssignmentCharacter::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedC
 	AEnemy* const _tempEnemy = Cast<AEnemy>(OtherActor);
 	if (_tempEnemy)
 	{
-		FString message = TEXT("=== HIT ENEMY ==== ");
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, message);
-
 		//in case it hit the player, it is good idea to disable the triggers, this way we'll make sure that the triggers will not over calculate with each single hit
 		rightHandTrigger->bGenerateOverlapEvents = 0;
 

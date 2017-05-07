@@ -206,9 +206,6 @@ void AEnemy::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, clas
 	AAssignmentCharacter* const _tempAssignmentCharacter = Cast<AAssignmentCharacter>(OtherActor);
 	if (_tempAssignmentCharacter)
 	{
-		FString message = TEXT("=== HIT PLAYER WITH HAND ==== ");
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, message);
-
 		//in case it hit the player, it is good idea to disable the triggers, this way we'll make sure that the triggers will not over calculate with each single hit
 		leftHandTrigger->bGenerateOverlapEvents = 0;
 		rightHandTrigger->bGenerateOverlapEvents = 0;

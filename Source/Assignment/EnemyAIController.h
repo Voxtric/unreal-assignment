@@ -35,7 +35,6 @@ public:
 		class AAssignmentCharacter* GetEnemy() const;
 
 
-
 	UFUNCTION(BlueprintCallable, Category = Behaviour)
 		void UpdateControlRotation(float DeltaTime, bool bUpdatePawn);
 
