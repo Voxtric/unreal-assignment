@@ -30,9 +30,17 @@ public:
 	FString Action;
 
 	UFUNCTION(BlueprintCallable, Category = "Pickup")
-	FString GetUseText() const
+
+	FString GetUseText(bool usingGamepad) const
 	{
-		return FString::Printf(TEXT("%s : Press E to %s"), *Name, *Action);
+    if (usingGamepad)
+    {
+      return FString::Printf(TEXT("%s: Press \'X\' to %s"), *Name, *Action);
+    }
+    else
+    {
+      return FString::Printf(TEXT("%s: Press \'E\' to %s"), *Name, *Action);
+    }
 	}
 	
 
