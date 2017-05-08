@@ -43,6 +43,12 @@ public:
   UFUNCTION(BlueprintCallable, Category = "Game")
     TArray<FString> LoadScorePlayers();
 
+  UFUNCTION(BlueprintCallable, Category = "Game")
+    void SaveInventory();
+
+  UFUNCTION(BlueprintCallable, Category = "Game")
+    void LoadInventory();
+
 	
 
 

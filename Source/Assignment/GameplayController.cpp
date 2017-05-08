@@ -152,6 +152,56 @@ TArray<FString> AGameplayController::LoadScorePlayers()
   return stringTArray;
 }
 
+void AGameplayController::SaveInventory()
+{
+  if (Inventory.Num() > 0)
+  {
+    FString fileName = FString("inventory");
+    IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+    IFileHandle* fileHandle = platformFile.OpenWrite(*fileName);
+    if (fileHandle)
+    {
+      uint8* byteArray = reinterpret_cast<uint8*>(FMemory::Malloc(sizeof(TCHAR)));
+      for (int i = 0; i < Inventory.Num(); ++i)
+      {
+        FString id = Inventory[i].ItemID.ToString();
+        TCHAR var = (*id)[0];
+        TCHAR* charPointer = reinterpret_cast<TCHAR*>(byteArray);
+        *charPointer = var;
+        fileHandle->Write(byteArray, sizeof(TCHAR));
+      }
+      delete fileHandle;
+      FMemory::Free(byteArray);
+    }
+  }
+}
+
+void AGameplayController::LoadInventory()
+{
+  FString fileName = FString("inventory");
+  IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
+  IFileHandle* fileHandle = platformFile.OpenRead(*fileName);
+  if (fileHandle)
+  {    
+    bool eof = false;
+    while (!eof)
+    {
+      TCHAR var = ' ';
+      TCHAR* charPointer = &var;
+      uint8* byteBuffer = reinterpret_cast<uint8*>(charPointer);
+      eof = !fileHandle->Read(byteBuffer, sizeof(TCHAR));
+      if (!eof)
+      {
+        FString id = FString("");
+        id.AppendChar(var);
+        AddItemToInventoryByID(FName(*id));        
+      }
+    }
+    delete fileHandle;
+    platformFile.DeleteFile(*fileName);
+  }
+}
+
 void AGameplayController::Interact()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, TEXT("Interact"));
