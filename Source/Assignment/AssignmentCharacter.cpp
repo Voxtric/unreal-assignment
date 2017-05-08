@@ -327,6 +327,7 @@ void AAssignmentCharacter::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedC
 		//in case it hit the player, it is good idea to disable the triggers, this way we'll make sure that the triggers will not over calculate with each single hit
 		rightHandTrigger->bGenerateOverlapEvents = 0;
 
-		_tempEnemy->OnChangeHealthByAmount(10.f);
+		_tempEnemy->OnChangeHealthByAmount(15.f);
+		_tempEnemy->isHit = true;
 	}
 }

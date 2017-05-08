@@ -22,6 +22,7 @@ AEnemy::AEnemy()
 	AttackDamage = 10;
 	IsDead = false;
 	IsAttacking = false;
+	isHit = false;
 
 	//Because the enmy have to rotate to face the running direction, The Yaw rotation needed!
 	bUseControllerRotationYaw = true;
@@ -113,8 +114,6 @@ void AEnemy::OnPerformAttack()
 	const FVector TraceStart = GetActorLocation();
 	const FVector LookingDirection = GetActorRotation().Vector();
 	const FVector TraceEnd = TraceStart + LookingDirection * AttackRange;
-
-
 
 	//perform a sphere sweep
 	static FName WeaponFireTag = FName(TEXT("WeaponTrace"));
