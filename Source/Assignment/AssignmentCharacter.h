@@ -163,6 +163,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		float LoadValue(FString valName);
 
+	//Perform attack
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+	void OnPerformAttack();
+
+	// Responsible for attacking
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void OnAttack();
+
 	// post attack operations
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
 		void OnPostAttack();
@@ -191,10 +199,6 @@ protected:
 	// Called to stop jump and start animations of idle etc.
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")
 		void StopJumping();
-
-	// Responsible for attacking
-	UFUNCTION(BlueprintCallable, Category = "Player Actions")
-		void OnAttack();
 
 	// Responsible for changing weapons
 	UFUNCTION(BlueprintCallable, Category = "Player Actions")

@@ -84,7 +84,7 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AAssignmentCharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &AAssignmentCharacter::StopJumping);
 
-	InputComponent->BindAction("Attack", IE_Pressed, this, &AAssignmentCharacter::OnAttack);
+	InputComponent->BindAction("Attack", IE_Pressed, this, &AAssignmentCharacter::OnPerformAttack);
 	InputComponent->BindAction("ChangeWeapon", IE_Released, this, &AAssignmentCharacter::OnChangeWeapon);
 
 	InputComponent->BindAxis("MoveForward", this, &AAssignmentCharacter::MoveForward);
@@ -126,24 +126,24 @@ void AAssignmentCharacter::StopJumping()
 	}
 }
 
-void AAssignmentCharacter::OnAttack()
+void AAssignmentCharacter::OnPerformAttack()
 {
 	if (IsControlable && !IsAttacking)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
 		IsAttacking = true;
-		rightHandTrigger->bGenerateOverlapEvents = 1;
 	}
+}
+
+void AAssignmentCharacter::OnAttack()
+{
+	rightHandTrigger->bGenerateOverlapEvents = 1;
 }
 
 void AAssignmentCharacter::OnPostAttack()
 {
-	if (IsControlable)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
-		IsAttacking = false;
-		rightHandTrigger->bGenerateOverlapEvents = 0;
-	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
+	IsAttacking = false;
+	rightHandTrigger->bGenerateOverlapEvents = 0;
 }
 
 void AAssignmentCharacter::OnChangeWeapon()
