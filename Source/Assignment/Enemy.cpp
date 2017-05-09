@@ -209,7 +209,8 @@ void AEnemy::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, clas
 		leftHandTrigger->bGenerateOverlapEvents = 0;
 		rightHandTrigger->bGenerateOverlapEvents = 0;
 
-		_tempAssignmentCharacter->OnChangeHealthByAmount(50.f);
+		_tempAssignmentCharacter->OnChangeHealthByAmount(15.f);
+		_tempAssignmentCharacter->isHit = true;
 	}
 }
 

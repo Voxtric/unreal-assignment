@@ -127,6 +127,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
 		bool IsControlable;
 
+	// To be able to disable the player during cutscenes and menus and the such.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Attributes")
+		bool isHit;
+
+	// post attack operations
+	UFUNCTION(BlueprintCallable, Category = "Player Actions")
+		void OnPostHit();
+
 	// Returns IsStillAlive
 	UFUNCTION(BlueprintCallable, Category = "Player Attributes")
 		bool GetIsStillAlive() const { return IsStillAlive; }

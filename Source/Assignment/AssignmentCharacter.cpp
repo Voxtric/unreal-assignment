@@ -18,8 +18,8 @@ AAssignmentCharacter::AAssignmentCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
   
-  Time = 600.0f;
-  Score = 0;
+	Time = 600.0f;
+	Score = 0;
 
 	TotalHealth = 100.f;
 	AttackRange = 25.f;
@@ -62,6 +62,7 @@ AAssignmentCharacter::AAssignmentCharacter()
 
 	IsStillAlive = true;
 	IsAttacking = false;
+	isHit = false;
 	WeaponIndex = 1;
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -330,4 +331,9 @@ void AAssignmentCharacter::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedC
 		_tempEnemy->OnChangeHealthByAmount(15.f);
 		_tempEnemy->isHit = true;
 	}
+}
+
+void AAssignmentCharacter::OnPostHit()
+{
+	isHit = false;
 }
