@@ -59,6 +59,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Behavior")
 		bool IsAttacking;
 
+	//Check if the enemy is dead or alive
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Behavior")
+		bool isHit;
+
 	//The sensing component used to see or hear the player
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy AI")
 		class UPawnSensingComponent* PawnSensor;

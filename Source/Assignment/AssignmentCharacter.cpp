@@ -18,8 +18,8 @@ AAssignmentCharacter::AAssignmentCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
   
-  Time = 600.0f;
-  Score = 0;
+	Time = 600.0f;
+	Score = 0;
 
 	TotalHealth = 100.f;
 	AttackRange = 25.f;
@@ -62,6 +62,7 @@ AAssignmentCharacter::AAssignmentCharacter()
 
 	IsStillAlive = true;
 	IsAttacking = false;
+	isHit = false;
 	WeaponIndex = 1;
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -84,7 +85,7 @@ void AAssignmentCharacter::SetupPlayerInputComponent(class UInputComponent* Inpu
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AAssignmentCharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &AAssignmentCharacter::StopJumping);
 
-	InputComponent->BindAction("Attack", IE_Pressed, this, &AAssignmentCharacter::OnAttack);
+	InputComponent->BindAction("Attack", IE_Pressed, this, &AAssignmentCharacter::OnPerformAttack);
 	InputComponent->BindAction("ChangeWeapon", IE_Released, this, &AAssignmentCharacter::OnChangeWeapon);
 
 	InputComponent->BindAxis("MoveForward", this, &AAssignmentCharacter::MoveForward);
@@ -126,24 +127,24 @@ void AAssignmentCharacter::StopJumping()
 	}
 }
 
-void AAssignmentCharacter::OnAttack()
+void AAssignmentCharacter::OnPerformAttack()
 {
 	if (IsControlable && !IsAttacking)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnAttack()"));
 		IsAttacking = true;
-		rightHandTrigger->bGenerateOverlapEvents = 1;
 	}
+}
+
+void AAssignmentCharacter::OnAttack()
+{
+	rightHandTrigger->bGenerateOverlapEvents = 1;
 }
 
 void AAssignmentCharacter::OnPostAttack()
 {
-	if (IsControlable)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
-		IsAttacking = false;
-		rightHandTrigger->bGenerateOverlapEvents = 0;
-	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, TEXT("OnPostAttack()"));
+	IsAttacking = false;
+	rightHandTrigger->bGenerateOverlapEvents = 0;
 }
 
 void AAssignmentCharacter::OnChangeWeapon()
@@ -327,6 +328,12 @@ void AAssignmentCharacter::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedC
 		//in case it hit the player, it is good idea to disable the triggers, this way we'll make sure that the triggers will not over calculate with each single hit
 		rightHandTrigger->bGenerateOverlapEvents = 0;
 
-		_tempEnemy->OnChangeHealthByAmount(10.f);
+		_tempEnemy->OnChangeHealthByAmount(15.f);
+		_tempEnemy->isHit = true;
 	}
+}
+
+void AAssignmentCharacter::OnPostHit()
+{
+	isHit = false;
 }

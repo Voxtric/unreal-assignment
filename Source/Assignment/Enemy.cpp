@@ -22,6 +22,7 @@ AEnemy::AEnemy()
 	AttackDamage = 10;
 	IsDead = false;
 	IsAttacking = false;
+	isHit = false;
 
 	//Because the enmy have to rotate to face the running direction, The Yaw rotation needed!
 	bUseControllerRotationYaw = true;
@@ -113,8 +114,6 @@ void AEnemy::OnPerformAttack()
 	const FVector TraceStart = GetActorLocation();
 	const FVector LookingDirection = GetActorRotation().Vector();
 	const FVector TraceEnd = TraceStart + LookingDirection * AttackRange;
-
-
 
 	//perform a sphere sweep
 	static FName WeaponFireTag = FName(TEXT("WeaponTrace"));
@@ -210,7 +209,8 @@ void AEnemy::OnHandTriggerOverlap(UPrimitiveComponent* OverlappedComponent, clas
 		leftHandTrigger->bGenerateOverlapEvents = 0;
 		rightHandTrigger->bGenerateOverlapEvents = 0;
 
-		_tempAssignmentCharacter->OnChangeHealthByAmount(5.f);
+		_tempAssignmentCharacter->OnChangeHealthByAmount(15.f);
+		_tempAssignmentCharacter->isHit = true;
 	}
 }
 
